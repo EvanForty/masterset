@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MasterSet — Finish the set. Own it as one.</title>
+<meta name="description" content="MasterSet locks Collector Crypt card NFTs into an on-chain binder. Complete the set and mint one Set NFT backed by the vaulted slabs.">
+<meta name="theme-color" content="#131313">
+<meta property="og:title" content="MasterSet — Finish the set. Own it as one.">
+<meta property="og:description" content="Lock Collector Crypt card NFTs into an on-chain binder, complete the set, and mint one Set NFT backed by the vaulted slabs.">
+<meta property="og:type" content="website">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EFEDE8; --bg-alt:#E4E1DA; --surface:#FFFFFF; --surface-2:#F5F3EF;
+  --line:rgba(0,0,0,.12); --line-strong:rgba(0,0,0,.3);
+  --text:#141414; --muted:#5C5954; --solid-bg:#141414; --solid-fg:#FFFFFF;
+  --orange:#FF7A00; --orange-2:#E04E00; --orange-3:#FF9A2E;
+  --cyan:#36CDE4; --cyan-2:#4FDDF8; --blue:#0A7CFF; --blue-2:#0062F0; --green:#16D98A; --red:#F0433A;
+  --on-cyan:#000000; --paper:#FFFFFF; --paper-text:#141414; --paper-muted:#55524D;
+  --glow-o:rgba(255,122,0,.14); --glow-c:rgba(54,205,228,.16);
+  --shadow:0 24px 50px -24px rgba(0,0,0,.35);
+  --display:'Unbounded','Arial Black',system-ui,sans-serif;
+  --body:'Rubik',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131313; --bg-alt:#0E0E0E; --surface:#1C1C1F; --surface-2:#242428;
+    --line:rgba(255,255,255,.1); --line-strong:rgba(255,255,255,.32);
+    --text:#F5F5F5; --muted:#A3A3AA; --solid-bg:#FFFFFF; --solid-fg:#141414;
+    --glow-o:rgba(255,122,0,.2); --glow-c:rgba(54,205,228,.14);
+    --shadow:0 30px 60px -28px rgba(0,0,0,.8);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131313; --bg-alt:#0E0E0E; --surface:#1C1C1F; --surface-2:#242428;
+  --line:rgba(255,255,255,.1); --line-strong:rgba(255,255,255,.32);
+  --text:#F5F5F5; --muted:#A3A3AA; --solid-bg:#FFFFFF; --solid-fg:#141414;
+  --glow-o:rgba(255,122,0,.2); --glow-c:rgba(54,205,228,.14);
+  --shadow:0 30px 60px -28px rgba(0,0,0,.8);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px);scroll-behavior:smooth;height:auto}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+img,svg{max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px;border-radius:6px}
+.wrap{width:min(1240px,100% - 40px);margin-inline:auto}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.hl{color:var(--orange)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 34px;border-radius:999px;border:1.5px solid var(--line-strong);background:transparent;font-weight:500;font-size:15px;letter-spacing:.02em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:transform .15s ease,background .15s ease,border-color .15s}
+.btn:hover{border-color:var(--text)}
+.btn:active{transform:translateY(1px)}
+.btn.solid{background:var(--solid-bg);color:var(--solid-fg);border-color:var(--solid-bg)}
+.btn.orange{background:var(--orange);border-color:var(--orange);color:#111}
+.btn.sm{min-height:42px;padding:0 20px;font-size:13px}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+
+/* Nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:border-color .2s}
+.nav.scrolled{border-bottom-color:var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:84px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand svg{width:44px;height:38px;flex:none}
+.brand span{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:.01em}
+.nav-links{display:flex;gap:30px}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:15px}
+.nav-links a:hover{color:var(--text)}
+.wallet-btn{white-space:nowrap}
+.wallet-btn .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px color-mix(in srgb,var(--green) 25%,transparent)}
+@media (max-width:900px){.nav-links{display:none}}
+@media (max-width:480px){.brand span{font-size:17px}.brand svg{width:36px;height:31px}.nav .wrap{height:72px;gap:10px}.wallet-btn{padding:0 14px;font-size:12px}}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;padding:60px 0 120px}
+.hero::before{content:"";position:absolute;width:760px;height:760px;left:-220px;top:-160px;border-radius:50%;background:radial-gradient(circle,var(--glow-o),transparent 62%);pointer-events:none}
+.hero::after{content:"";position:absolute;width:900px;height:900px;right:-300px;top:-60px;border-radius:50%;background:radial-gradient(circle,var(--glow-c),transparent 60%);pointer-events:none}
+.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(40px,6vw,76px);line-height:1.04;letter-spacing:-.035em;margin:0 0 28px}
+.hero p.lead{max-width:34em;font-size:clamp(17px,1.5vw,20px);color:var(--muted);margin:0 0 40px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:16px}
+.hero-ctas .btn{min-width:210px}
+@media (max-width:960px){.hero-grid{grid-template-columns:1fr}.hero{padding:30px 0 80px}}
+@media (max-width:520px){.hero-ctas .btn{width:100%}}
+
+.hero-visual{position:relative;min-height:520px;display:grid;place-items:center}
+.hb{position:relative;width:min(380px,78%);padding:22px;border-radius:26px;background:linear-gradient(160deg,#2A2A30,#17171A);border:1px solid rgba(255,255,255,.08);box-shadow:16px 16px 0 var(--cyan),var(--shadow);transform:rotate(-4deg);color:#F5F5F5}
+.hb-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;font-size:13px;color:#A9A9B2}
+.hb-head b{font-family:var(--display);font-weight:700;color:#fff;font-size:15px}
+.hb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.hb-slot{position:relative;aspect-ratio:63/88;border-radius:10px;border:1.5px dashed rgba(255,255,255,.2);display:grid;place-items:end start;padding:8px;font-size:11px;color:rgba(255,255,255,.45);overflow:hidden}
+.hb-slot i{position:absolute;inset:0;border-radius:9px;background:linear-gradient(180deg,#fff 0 18%,transparent 18%),linear-gradient(150deg,hsl(var(--h) 95% 58%),hsl(calc(var(--h) + 30) 90% 42%));opacity:0;transform:translateY(-14px) scale(.96);transition:opacity .35s ease,transform .35s cubic-bezier(.2,.9,.3,1.3)}
+.hb-slot i::after{content:"";position:absolute;left:10%;right:10%;top:6%;height:6%;border-radius:2px;background:var(--orange)}
+.hb-slot b{position:relative;font-weight:500}
+.hb-slot.on{border-style:solid;border-color:transparent;color:#111}
+.hb-slot.on i{opacity:1;transform:none}
+.hb-slot i img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
+.hb-slot.img i::after{display:none}
+.hb-slot.img.on b{opacity:0}
+.hb-seal{position:absolute;left:50%;bottom:-28px;transform:translateX(-50%) scale(.6) rotate(4deg);display:flex;align-items:center;gap:12px;padding:12px 22px 12px 14px;border-radius:999px;background:var(--orange);color:#111;font-family:var(--display);font-weight:700;font-size:14px;white-space:nowrap;opacity:0;transition:opacity .3s,transform .4s cubic-bezier(.2,.9,.3,1.4);box-shadow:0 16px 40px -12px rgba(255,122,0,.7)}
+.hb-seal svg{width:30px;height:26px}
+.hb-seal.on{opacity:1;transform:translateX(-50%) scale(1) rotate(4deg)}
+.chip{position:absolute;display:grid;place-items:center;width:72px;height:72px;border-radius:50%;box-shadow:0 0 0 12px color-mix(in srgb,currentColor 12%,transparent)}
+.chip svg{width:30px;height:30px}
+.chip.c1{top:24px;left:4%;background:var(--cyan);color:var(--cyan)}
+.chip.c2{bottom:40px;right:4%;background:var(--green);color:var(--green)}
+.chip.c1 svg,.chip.c2 svg{color:#0d0d0d}
+.spark{position:absolute;width:26px;height:26px;fill:var(--text);opacity:.85}
+.spark.s1{top:18%;right:10%}.spark.s2{bottom:16%;left:8%;width:34px;height:34px}.spark.s3{top:8%;right:38%;width:18px;height:18px;fill:var(--orange)}
+.dotc{position:absolute;width:9px;height:9px;border-radius:50%;background:var(--cyan)}
+@media (max-width:520px){.hero-visual{min-height:440px}.chip{width:56px;height:56px}.chip svg{width:24px;height:24px}}
+
+/* Section titles */
+.sec{padding:110px 0}
+.sec-title{font-family:var(--display);font-weight:700;font-size:clamp(32px,4.4vw,56px);line-height:1.08;letter-spacing:-.03em;margin:0 0 18px;max-width:16em}
+.sec-sub{color:var(--muted);max-width:40em;margin:0 0 48px;font-size:18px}
+@media (max-width:640px){.sec{padding:76px 0}}
+
+/* How it works */
+.how{position:relative;padding-top:40px}
+.tag{display:inline-block;background:#fff;color:#111;font-family:var(--display);font-weight:700;font-size:clamp(22px,2.6vw,34px);letter-spacing:-.02em;padding:16px 30px;transform:rotate(-4deg);position:relative;z-index:2;margin:0 0 -22px 120px;box-shadow:0 10px 30px -14px rgba(0,0,0,.4)}
+.how-panel{background:var(--cyan);color:var(--on-cyan);border-radius:30px;padding:76px 56px 60px;display:grid;grid-template-columns:repeat(4,1fr);gap:28px 56px;position:relative}
+.step{position:relative;display:flex;flex-direction:column;gap:18px}
+.step-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.step-n{font-family:var(--display);font-weight:800;font-size:48px;line-height:1;letter-spacing:-.04em}
+.step svg.ill{width:92px;height:92px;flex:none}
+.step h3{font-family:var(--display);font-weight:700;font-size:19px;margin:6px 0 0;letter-spacing:-.01em}
+.step p{margin:0;font-size:16px;line-height:1.5}
+.step:not(:last-child)::after{content:"";position:absolute;right:-45px;top:29px;width:34px;height:34px;border-radius:50%;background:#141414 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2336CDE4' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h13M13 6l6 6-6 6'/%3E%3C/svg%3E") center/16px no-repeat}
+@media (max-width:1180px){.how-panel{grid-template-columns:repeat(2,1fr);row-gap:48px}.step:nth-child(2)::after{display:none}}
+@media (max-width:640px){.how-panel{grid-template-columns:1fr;padding:64px 26px 40px}.step::after{display:none}.tag{margin-left:20px}}
+
+/* Binder app */
+.app{background:var(--bg-alt);border-block:1px solid var(--line)}
+.app-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:34px}
+.app-head .sec-sub{margin:0}
+.set-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:26px}
+.set-tab{text-align:left;padding:16px 18px;border-radius:18px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;display:grid;gap:2px;transition:border-color .15s}
+.set-tab:hover{border-color:var(--line-strong)}
+.set-tab.on{border-color:var(--orange);box-shadow:inset 0 0 0 1px var(--orange)}
+.st-fr{font-size:13px;color:var(--muted)}
+.st-t{font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:-.01em}
+.st-p{font-size:13px;color:var(--muted);margin-top:6px}
+.set-tab.on .st-p{color:var(--orange)}
+@media (max-width:900px){.set-tabs{grid-template-columns:repeat(2,1fr)}}
+
+.app-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:24px;align-items:start}
+@media (max-width:1060px){.app-grid{grid-template-columns:1fr}}
+.binder{background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:28px}
+.binder-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;margin-bottom:22px}
+.binder-top h3{font-family:var(--display);font-weight:700;font-size:26px;letter-spacing:-.02em;margin:0 0 6px}
+.binder-top p{margin:0;color:var(--muted);font-size:15px;max-width:36em}
+.slot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+
+.slab{position:relative;border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:8px;background:#1B1B1E;color:#fff;box-shadow:0 12px 26px -16px rgba(0,0,0,.6)}
+.slab-label{display:flex;justify-content:space-between;gap:6px;padding:7px 8px;border-radius:6px;background:#fff;color:#141414;border-top:4px solid var(--red);font-size:11.5px;font-weight:500;line-height:1.2}
+.slab-label .g{color:var(--orange-2);white-space:nowrap}
+.slab-art{aspect-ratio:63/88;border-radius:8px;position:relative;overflow:hidden;background:linear-gradient(155deg,hsl(var(--h) 92% 58%),hsl(calc(var(--h) + 35) 88% 40%));color:#111}
+.slab-art .num{position:absolute;right:10px;bottom:6px;font-family:var(--display);font-weight:800;font-size:34px;letter-spacing:-.04em;opacity:.4}
+.slab-art.has-img{background:#0F0F12}
+.slab-art.has-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+.slab-art.has-img .num{display:none}
+.slab-foot{padding:0 4px 2px;font-size:13.5px;font-weight:500;line-height:1.3}
+@keyframes flash{0%{transform:scale(.94)}60%{transform:scale(1.03)}100%{transform:none}}
+
+/* Panel */
+.panel{display:grid;gap:16px}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px}
+.pcard h4{font-family:var(--display);font-weight:700;font-size:16px;margin:0 0 12px;letter-spacing:-.01em}
+.prog-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.prog-big{font-family:var(--display);font-weight:800;font-size:42px;letter-spacing:-.04em;line-height:1}
+.prog-big small{font-size:18px;color:var(--muted);font-weight:500}
+.bar{height:10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);margin:16px 0 12px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--orange),var(--orange-3));border-radius:inherit;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.kv{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);gap:10px}
+.kv b{color:var(--text);font-weight:500}
+.routes{display:grid;gap:10px;margin-bottom:14px}
+.route{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:14px;border:1.5px solid var(--line);cursor:pointer}
+.route:has(input:checked){border-color:var(--orange)}
+.route input{accent-color:var(--orange);margin-top:4px}
+.route b{display:block;font-weight:500;font-size:15px}
+.route span{font-size:13px;color:var(--muted)}
+.pcard .btn{width:100%}
+.pcard .btn+.btn{margin-top:10px}
+.hint{font-size:13px;color:var(--muted);margin:10px 0 0}
+.flow{margin:0;padding-left:20px;display:grid;gap:10px;font-size:15px;color:var(--muted)}
+.flow li::marker{color:var(--orange);font-weight:600}
+.log{list-style:none;margin:0;padding:0;display:grid;gap:10px;max-height:240px;overflow:auto;font-size:14px}
+.log li{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start}
+.log li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--orange);margin-top:7px}
+.log time{display:block;font-size:12px;color:var(--muted)}
+.empty{color:var(--muted);font-size:14px;margin:0}
+.wallet-line{display:flex;align-items:center;gap:12px}
+.wallet-line .av{width:40px;height:40px;border-radius:12px;flex:none;background:conic-gradient(from 90deg,var(--orange),var(--cyan),var(--blue),var(--orange))}
+.wallet-line b{display:block;font-weight:500}
+.wallet-line span{font-size:13px;color:var(--muted)}
+
+.setnft{border-radius:22px;padding:22px;background:linear-gradient(150deg,#232327,#121214);color:#fff;border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
+.setnft::before{content:"";position:absolute;width:220px;height:220px;right:-70px;top:-70px;border-radius:50%;background:radial-gradient(circle,rgba(255,122,0,.45),transparent 65%)}
+.setnft .top{display:flex;align-items:center;gap:12px;position:relative}
+.setnft .top svg{width:46px;height:40px;flex:none}
+.setnft .top b{font-family:var(--display);font-weight:700;font-size:15px;display:block;line-height:1.25}
+.setnft .top span{font-size:12.5px;color:#B6B6BE}
+.stack{display:flex;margin:18px 0 14px;position:relative;height:64px}
+.stack i{width:44px;height:60px;border-radius:6px;border:2px solid #fff;margin-right:-20px;background:linear-gradient(180deg,#fff 0 20%,transparent 20%),linear-gradient(150deg,hsl(var(--h) 92% 58%),hsl(calc(var(--h) + 35) 88% 40%));box-shadow:0 6px 14px rgba(0,0,0,.4)}
+.setnft .kv{color:#B6B6BE}.setnft .kv b{color:#fff}
+.status-pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:500;background:rgba(255,255,255,.12)}
+.status-pill.listed{background:var(--cyan);color:#111}
+.status-pill.collateral{background:var(--blue);color:#fff}
+.status-pill.burned{background:var(--red);color:#fff}
+.nft-actions{display:grid;gap:8px;margin-top:16px;position:relative}
+.nft-actions .btn{min-height:44px;font-size:13px;color:#fff;border-color:rgba(255,255,255,.35)}
+.nft-actions .btn.orange{color:#111;border-color:var(--orange)}
+.nft-actions .btn.white{background:#fff;color:#111;border-color:#fff}
+
+/* Utility section */
+.uses{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.use{padding:32px;border-radius:24px;border:1.5px solid var(--line);background:var(--surface);display:flex;flex-direction:column;gap:14px}
+.use:nth-child(1){border-radius:24px 24px 24px 6px}
+.use:nth-child(3){background:var(--orange);color:#111;border-color:var(--orange)}
+.use .ico{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;background:var(--solid-bg);color:var(--solid-fg)}
+.use:nth-child(3) .ico{background:#111;color:var(--orange)}
+.use .ico svg{width:28px;height:28px}
+.use h3{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.02em;margin:6px 0 0}
+.use p{margin:0;color:var(--muted)}
+.use:nth-child(3) p{color:#2A1A08}
+@media (max-width:900px){.uses{grid-template-columns:1fr}}
+
+/* Rails */
+.rails{display:grid;grid-template-columns:1fr 1.1fr;gap:56px;align-items:start}
+.rail-list{display:grid;border-top:1.5px solid var(--line)}
+.rail{display:grid;grid-template-columns:150px 1fr;gap:24px;padding:26px 0;border-bottom:1.5px solid var(--line)}
+.rail h3{font-family:var(--display);font-weight:700;font-size:18px;margin:2px 0 0;letter-spacing:-.01em}
+.rail p{margin:0;color:var(--muted)}
+.big-line{font-family:var(--display);font-weight:700;font-size:clamp(26px,3vw,38px);line-height:1.15;letter-spacing:-.03em;margin:28px 0 0;padding:28px;border-radius:24px;background:var(--cyan);color:#111;transform:rotate(-1.5deg)}
+@media (max-width:960px){.rails{grid-template-columns:1fr}}
+@media (max-width:560px){.rail{grid-template-columns:1fr;gap:6px}}
+
+/* Footer */
+footer{padding:80px 0 50px}
+.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+.foot p{color:var(--muted);margin:16px 0 0;max-width:24em}
+.foot h4{font-family:var(--display);font-weight:700;font-size:17px;margin:0 0 16px}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.foot ul a{color:var(--muted);text-decoration:none}
+.foot ul a:hover{color:var(--text)}
+.legal{margin-top:56px;padding-top:24px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:13px;color:var(--muted)}
+@media (max-width:760px){.foot{grid-template-columns:1fr}}
+
+/* Modal / dialog */
+.scrim{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px}
+.scrim.open{display:flex}
+.modal{width:min(440px,100%);max-height:calc(100% - 40px);overflow:auto;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:26px;padding:26px;box-shadow:var(--shadow);animation:pop .22s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes pop{from{transform:scale(.95);opacity:0}}
+.modal-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.modal h3{font-family:var(--display);font-weight:700;font-size:22px;margin:0;letter-spacing:-.02em}
+.modal .x{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:transparent;cursor:pointer;display:grid;place-items:center}
+.modal .x svg{width:16px;height:16px}
+.modal .sub{color:var(--muted);font-size:15px;margin:0 0 18px}
+.wlist{display:grid;gap:10px}
+.witem{display:flex;align-items:center;gap:14px;width:100%;padding:12px 14px;border-radius:16px;border:1.5px solid var(--line);background:var(--surface-2);cursor:pointer;text-align:left;text-decoration:none;color:var(--text)}
+.witem:hover{border-color:var(--orange)}
+.witem img,.witem .wico{width:38px;height:38px;border-radius:10px;flex:none;object-fit:cover}
+.witem .wico{display:grid;place-items:center;font-family:var(--display);font-weight:700;color:#fff}
+.witem b{display:block;font-weight:500}
+.witem span{font-size:13px;color:var(--muted)}
+.witem .tagr{margin-left:auto;font-size:12px;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--green) 22%,transparent);color:var(--text)}
+.witem .tagr.inst{background:var(--surface);border:1px solid var(--line)}
+.addr{font-size:14px;word-break:break-all;padding:12px 14px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line);margin:4px 0 16px}
+.modal .row{display:flex;gap:10px}
+.modal .row .btn{flex:1;min-height:48px;padding:0 16px}
+.dlg-body{color:var(--muted);font-size:15px;margin:8px 0 22px}
+.dlg-body b{color:var(--text);font-weight:500}
+
+/* Toasts */
+.toasts{position:fixed;z-index:90;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:grid;gap:10px;width:min(460px,calc(100% - 32px));pointer-events:none}
+.toast{padding:14px 18px;border-radius:14px;background:var(--solid-bg);color:var(--solid-fg);font-size:15px;box-shadow:var(--shadow);animation:pop .2s ease;display:flex;gap:10px;align-items:center}
+.toast.err{background:var(--red);color:#fff}
+.toast::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--orange);flex:none}
+.toast.err::before{background:#fff}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="ms-logo" viewBox="11 16 78 67">
+      <polygon points="16,30 31,21 50,32 69,21 84,30 84,68 67,78 53,70 53,60 62,55 62,43 50,50 38,43 38,55 47,60 47,70 33,78 16,68" fill="#fff" stroke="#fff" stroke-width="4.5" stroke-linejoin="round"/>
+      <polygon points="16,30 31,21 50,32 69,21 84,30 50,50" fill="#FF8500"/>
+      <polygon points="16,30 30,38 30,51 16,59" fill="#FF6A00"/>
+      <polygon points="30,38 38,43 38,55 30,51" fill="#DA4A00"/>
+      <polygon points="62,43 70,38 70,51 62,55" fill="#FF6A00"/>
+      <polygon points="70,38 84,30 84,59 70,51" fill="#DA4A00"/>
+      <polygon points="16,59 30,51 47,60 33,68" fill="#4FDDF8"/>
+      <polygon points="16,59 33,68 33,78 16,68" fill="#0A88FF"/>
+      <polygon points="33,68 47,60 47,70 33,78" fill="#0066FF"/>
+      <polygon points="53,60 70,51 84,59 67,68" fill="#4FDDF8"/>
+      <polygon points="53,60 67,68 67,78 53,70" fill="#0A88FF"/>
+      <polygon points="67,68 84,59 84,68 67,78" fill="#0066FF"/>
+    </symbol>
+    <symbol id="spark" viewBox="0 0 24 24"><path d="M12 0C13 8 16 11 24 12 16 13 13 16 12 24 11 16 8 13 0 12 8 11 11 8 12 0Z"/></symbol>
+  </defs>
+</svg>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="MasterSet home"><svg><use href="#ms-logo"/></svg><span>MASTERSET</span></a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#how">How it works</a>
+      <a href="#binder">Binder</a>
+      <a href="#set-nft">Set NFT</a>
+      <a href="#rails">Why MasterSet</a>
+    </nav>
+    <button class="btn sm wallet-btn" id="wallet-btn" type="button">Connect wallet</button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1>Stop spinning. <span class="hl">Finish the set.</span></h1>
+        <p class="lead">MasterSet locks your Collector Crypt card NFTs into an on-chain binder. Complete it and mint one Set NFT backed by the vaulted slabs — trade it as a single asset, borrow against it, or burn it to redeem the whole collection.</p>
+        <div class="hero-ctas">
+          <a class="btn solid" href="#binder">Browse sets</a>
+          <a class="btn" href="#how">How it works</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="chip c1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.6 12.4a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21.5 8H6"/></svg></div>
+        <div class="chip c2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M3 8l4-4 4 4M17 20V4M21 16l-4 4-4-4"/></svg></div>
+        <svg class="spark s1"><use href="#spark"/></svg>
+        <svg class="spark s2"><use href="#spark"/></svg>
+        <svg class="spark s3"><use href="#spark"/></svg>
+        <span class="dotc" style="top:12%;left:30%"></span>
+        <span class="dotc" style="bottom:8%;left:46%;background:var(--green)"></span>
+        <span class="dotc" style="top:50%;right:2%"></span>
+        <div class="hb" id="hero-binder">
+          <div class="hb-head"><b>Base Set Holos</b><span id="hb-count">0 / 9</span></div>
+          <div class="hb-grid">
+            <div class="hb-slot img" style="--h:205"><i><img src="https://images.pokemontcg.io/base1/1.png" alt="" decoding="async"></i><b>#1</b></div>
+            <div class="hb-slot img" style="--h:210"><i><img src="https://images.pokemontcg.io/base1/2.png" alt="" decoding="async"></i><b>#2</b></div>
+            <div class="hb-slot img" style="--h:330"><i><img src="https://images.pokemontcg.io/base1/3.png" alt="" decoding="async"></i><b>#3</b></div>
+            <div class="hb-slot img" style="--h:18"><i><img src="https://images.pokemontcg.io/base1/4.png" alt="" decoding="async"></i><b>#4</b></div>
+            <div class="hb-slot img" style="--h:320"><i><img src="https://images.pokemontcg.io/base1/5.png" alt="" decoding="async"></i><b>#5</b></div>
+            <div class="hb-slot img" style="--h:195"><i><img src="https://images.pokemontcg.io/base1/6.png" alt="" decoding="async"></i><b>#6</b></div>
+            <div class="hb-slot img" style="--h:28"><i><img src="https://images.pokemontcg.io/base1/7.png" alt="" decoding="async"></i><b>#7</b></div>
+            <div class="hb-slot img" style="--h:260"><i><img src="https://images.pokemontcg.io/base1/8.png" alt="" decoding="async"></i><b>#8</b></div>
+            <div class="hb-slot img" style="--h:45"><i><img src="https://images.pokemontcg.io/base1/9.png" alt="" decoding="async"></i><b>#9</b></div>
+          </div>
+          <div class="hb-seal" id="hero-seal"><svg><use href="#ms-logo"/></svg>Set NFT minted</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how sec" id="how" style="padding-top:20px">
+    <div class="wrap">
+      <h2 class="tag">How it works</h2>
+      <div class="how-panel">
+        <div class="step">
+          <div class="step-top">
+            <svg class="ill" viewBox="0 0 108 108" fill="none" stroke="#000" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+              <rect x="34" y="8" width="30" height="40" rx="3" fill="#fff"/><rect x="38" y="13" width="22" height="6" fill="#F0433A" stroke="none"/><rect x="40" y="24" width="18" height="18" fill="#000" stroke="none"/>
+              <path d="M14 52h80v44H14z" fill="#fff"/><path d="M14 52l10-14h60l10 14"/><path d="M40 52v16h28V52" fill="#000"/>
+            </svg>
+            <span class="step-n">01</span>
+          </div>
+          <h3>Deposit your cards</h3>
+          <p>Move specific Collector Crypt card NFTs into a binder for the set you’re chasing. The slabs never leave the vault.</p>
+        </div>
+        <div class="step">
+          <div class="step-top">
+            <svg class="ill" viewBox="0 0 108 108" fill="none" stroke="#000" stroke-width="3.5" stroke-linejoin="round" aria-hidden="true">
+              <rect x="10" y="10" width="88" height="88" rx="10" fill="#fff"/>
+              <rect x="20" y="20" width="20" height="26" rx="3" fill="#000"/><rect x="44" y="20" width="20" height="26" rx="3" fill="#000"/><rect x="68" y="20" width="20" height="26" rx="3" fill="#000"/>
+              <rect x="20" y="62" width="20" height="26" rx="3" fill="#000"/><rect x="44" y="62" width="20" height="26" rx="3" fill="#000"/><rect x="68" y="62" width="20" height="26" rx="3" stroke-dasharray="4 4"/>
+            </svg>
+            <span class="step-n">02</span>
+          </div>
+          <h3>Fill the gaps</h3>
+          <p>Missing slots route through the Collector Crypt marketplace or the gacha and instant-buyback flow, straight into your binder.</p>
+        </div>
+        <div class="step">
+          <div class="step-top">
+            <svg class="ill" viewBox="0 0 108 108" fill="none" stroke="#000" stroke-width="3.5" stroke-linejoin="round" aria-hidden="true">
+              <path d="M54 6l42 24v48L54 102 12 78V30z" fill="#fff"/>
+              <path d="M54 6v48m0 0l42-24M54 54 12 30M54 54v48"/>
+              <path d="M30 60l10 6v14l-10-6z" fill="#FF7A00"/><path d="M78 60l-10 6v14l10-6z" fill="#0A7CFF"/>
+            </svg>
+            <span class="step-n">03</span>
+          </div>
+          <h3>Mint the Set NFT</h3>
+          <p>When every slot is filled, the contract locks the cards and mints one Set NFT that represents all of them.</p>
+        </div>
+        <div class="step">
+          <div class="step-top">
+            <svg class="ill" viewBox="0 0 108 108" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="54" cy="54" r="44" fill="#fff"/>
+              <path d="M32 44h40l-10-10M76 64H36l10 10"/>
+              <path d="M54 18v8M54 82v8" stroke="#F0433A"/>
+            </svg>
+            <span class="step-n">04</span>
+          </div>
+          <h3>Trade, borrow or redeem</h3>
+          <p>Sell the set as one asset, post it as collateral, or burn it to unlock the cards and redeem the physical slabs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="app sec" id="binder">
+    <div class="wrap">
+      <div class="app-head">
+        <div>
+          <h2 class="sec-title">Pick your binder</h2>
+          <p class="sec-sub">Every binder is a checklist of specific graded cards. Connect a Solana wallet and choose the set you want to finish.</p>
+        </div>
+      </div>
+      <div class="set-tabs" id="set-tabs" role="tablist" aria-label="Sets"></div>
+      <div class="app-grid">
+        <div class="binder" role="tabpanel">
+          <div class="binder-top">
+            <div><h3 id="b-title"></h3><p id="b-desc"></p></div>
+          </div>
+          <div class="slot-grid" id="slot-grid"></div>
+        </div>
+        <aside class="panel" id="panel" aria-label="Binder details"></aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="set-nft">
+    <div class="wrap">
+      <h2 class="sec-title">One asset. Three ways out.</h2>
+      <p class="sec-sub">A Set NFT is a receipt for every card in the binder. Whatever you do with it, the slabs stay insured in the vault until someone burns it.</p>
+      <div class="uses">
+        <article class="use">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M3 8l4-4 4 4M17 20V4M21 16l-4 4-4-4"/></svg></div>
+          <h3>Trade it as one</h3>
+          <p>List the full set in a single listing. Buyers get a finished collection instead of sixteen separate purchases and sixteen chances to get outbid.</p>
+        </article>
+        <article class="use">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="11" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3M12 14v3"/></svg></div>
+          <h3>Borrow against it</h3>
+          <p>Complete sets carry a premium over loose cards. Post the Set NFT as collateral and keep the collection while you unlock liquidity.</p>
+        </article>
+        <article class="use">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2 3 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-8z"/></svg></div>
+          <h3>Burn to redeem</h3>
+          <p>Burning the Set NFT unlocks every card and hands them to Collector Crypt’s existing redemption flow, so the slabs ship to your door.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="rails" style="padding-top:0">
+    <div class="wrap rails">
+      <div>
+        <h2 class="sec-title">Built on rails that already work</h2>
+        <p class="sec-sub" style="margin-bottom:0">MasterSet doesn’t vault, grade or ship anything itself. It sits on top of Collector Crypt’s custody, inventory and redemption, and turns pack volume into collections people hold.</p>
+        <p class="big-line">Gacha is velocity. A finished set is the reason to keep holding.</p>
+      </div>
+      <div class="rail-list">
+        <div class="rail"><h3>Custody</h3><p>Cards stay in the same secured, insured vaults they were deposited into. The binder only locks the NFTs that represent them.</p></div>
+        <div class="rail"><h3>Inventory</h3><p>Missing slots draw on the marketplace, gacha packs and instant buyback, so the hunt for the last card happens where the supply already is.</p></div>
+        <div class="rail"><h3>Redemption</h3><p>Burning a Set NFT releases the individual card NFTs, which redeem through the normal Collector Crypt process.</p></div>
+        <div class="rail"><h3>Solana</h3><p>Connect Phantom, Solflare, Backpack or any Wallet Standard wallet. Binders, deposits and Set NFTs live on Solana alongside the card NFTs.</p></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="brand" href="#top"><svg><use href="#ms-logo"/></svg><span>MASTERSET</span></a>
+        <p>Complete sets of real, vaulted cards, held as one asset on Solana.</p>
+      </div>
+      <div>
+        <h4>Product</h4>
+        <ul><li><a href="#binder">Binder</a></li><li><a href="#set-nft">Set NFT</a></li><li><a href="#how">How it works</a></li></ul>
+      </div>
+      <div>
+        <h4>Ecosystem</h4>
+        <ul><li><a href="https://collectorcrypt.com/" target="_blank" rel="noopener">Collector Crypt</a></li><li><a href="https://phantom.com/" target="_blank" rel="noopener">Phantom wallet</a></li><li><a href="https://solana.com/" target="_blank" rel="noopener">Solana</a></li></ul>
+      </div>
+    </div>
+    <div class="legal">
+      <span>MASTERSET © 2026</span>
+      <span>Not affiliated with or endorsed by Collector Crypt. Card names are used for identification only.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="scrim" id="wallet-modal" role="dialog" aria-modal="true" aria-labelledby="wm-title">
+  <div class="modal">
+    <div class="modal-h"><h3 id="wm-title">Connect a wallet</h3><button class="x" type="button" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div id="wm-body"></div>
+  </div>
+</div>
+
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.3/lib/index.iife.min.js" crossorigin="anonymous"></script>
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const W3 = () => (window.solanaWeb3 && window.solanaWeb3.PublicKey) ? window.solanaWeb3 : null;
+const short = a => a ? a.slice(0, 4) + '…' + a.slice(-4) : '';
+
+/* ---------- Set catalogue ---------- */
+// img: pokemontcg.io set code for card images (base1 = Base Set, base2 = Jungle, base3 = Fossil, base5 = Team Rocket)
+const RAW = [
+  { id:'base-holo', title:'Base Set Holo Rares', short:'Base Holos', franchise:'Pokémon, 1999', grade:'PSA 9', prefix:'#', img:'base1',
+    desc:'All 16 holographic rares from the original Pokémon Base Set, each graded PSA 9.',
+    cards:[['Alakazam','1',265],['Blastoise','2',205],['Chansey','3',330],['Charizard','4',18],['Clefairy','5',320],['Gyarados','6',210],['Hitmonchan','7',28],['Machamp','8',250],['Magneton','9',215],['Mewtwo','10',285],['Nidoking','11',275],['Ninetales','12',40],['Poliwrath','13',225],['Raichu','14',48],['Venusaur','15',150],['Zapdos','16',52]] },
+  { id:'jungle-holo', title:'Jungle Holo Rares', short:'Jungle Holos', franchise:'Pokémon, 1999', grade:'PSA 9', prefix:'#', img:'base2',
+    desc:'All 16 holographic rares from Jungle, the first expansion after Base Set, each graded PSA 9.',
+    cards:[['Clefable','1',330],['Electrode','2',0],['Flareon','3',18],['Jolteon','4',50],['Kangaskhan','5',30],['Mr. Mime','6',320],['Nidoqueen','7',220],['Pidgeot','8',35],['Pinsir','9',95],['Scyther','10',120],['Snorlax','11',190],['Vaporeon','12',205],['Venomoth','13',280],['Victreebel','14',110],['Vileplume','15',340],['Wigglytuff','16',330]] },
+  { id:'fossil-holo', title:'Fossil Holo Rares', short:'Fossil Holos', franchise:'Pokémon, 1999', grade:'PSA 9', prefix:'#', img:'base3',
+    desc:'All 15 holographic rares from Fossil, from Aerodactyl to the legendary birds, each graded PSA 9.',
+    cards:[['Aerodactyl','1',30],['Articuno','2',195],['Ditto','3',290],['Dragonite','4',35],['Gengar','5',275],['Haunter','6',265],['Hitmonlee','7',25],['Hypno','8',45],['Kabutops','9',30],['Lapras','10',205],['Magneton','11',215],['Moltres','12',15],['Muk','13',280],['Raichu','14',48],['Zapdos','15',52]] },
+  { id:'rocket-holo', title:'Team Rocket Dark Holos', short:'Rocket Holos', franchise:'Pokémon, 2000', grade:'PSA 9', prefix:'#', img:'base5',
+    desc:'All 15 Dark Pokémon holos from Team Rocket, including the secret Dark Raichu #83, each graded PSA 9.',
+    cards:[['Dark Alakazam','1',265],['Dark Arbok','2',280],['Dark Blastoise','3',205],['Dark Charizard','4',10],['Dark Dragonite','5',30],['Dark Dugtrio','6',30],['Dark Golbat','7',255],['Dark Gyarados','8',210],['Dark Hypno','9',45],['Dark Machamp','10',245],['Dark Magneton','11',215],['Dark Slowbro','12',330],['Dark Vileplume','13',340],['Dark Weezing','14',290],['Dark Raichu','83',48]] }
+];
+const SETS = RAW.map(s => ({ ...s, slots: s.cards.map((c, i) => ({ id: s.id + '-' + i, name: c[0], num: c[1], hue: c[2] })) }));
+const setById = id => SETS.find(s => s.id === id);
+const numLabel = (set, slot) => set.prefix + slot.num;
+const cardImg = (set, slot) => set.img ? `https://images.pokemontcg.io/${set.img}/${encodeURIComponent(slot.num)}.png` : null;
+
+/* ---------- Wallet state ---------- */
+const wallet = { address: null, entry: null, account: null, unsub: null, balance: null };
+
+/* ---------- Toasts / modal ---------- */
+function toast(msg, kind) {
+  const el = document.createElement('div');
+  el.className = 'toast' + (kind === 'err' ? ' err' : '');
+  el.textContent = msg;
+  $('#toasts').appendChild(el);
+  setTimeout(() => el.remove(), 3800);
+}
+let lastFocus = null;
+function openModal(id) { lastFocus = document.activeElement; const m = $('#' + id); m.classList.add('open'); const f = m.querySelector('button, a, input'); if (f) f.focus(); }
+function closeModal(id) { $('#' + id).classList.remove('open'); if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+$$('.scrim').forEach(s => {
+  s.addEventListener('click', e => { if (e.target === s || e.target.closest('[data-close]')) closeModal(s.id); });
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') $$('.scrim.open').forEach(s => closeModal(s.id)); });
+
+function errText(e, fallback) {
+  const m = (e && (e.message || String(e))) || '';
+  if (/reject|denied|cancel|declin/i.test(m) || (e && e.code === 4001)) return 'Request rejected in your wallet.';
+  return m ? fallback + ' (' + m + ')' : fallback;
+}
+
+/* ---------- Wallet discovery: Wallet Standard + injected providers ---------- */
+const stdWallets = [];
+function registerStd(...ws) {
+  for (const w of ws) {
+    if (!w || stdWallets.includes(w)) continue;
+    const chains = w.chains || [];
+    if (!chains.some(c => String(c).startsWith('solana:'))) continue;
+    if (!w.features || !w.features['standard:connect']) continue;
+    stdWallets.push(w);
+  }
+  if ($('#wallet-modal').classList.contains('open') && !wallet.address) renderWalletModal();
+  return () => {};
+}
+try {
+  window.addEventListener('wallet-standard:register-wallet', e => { try { e.detail({ register: registerStd }); } catch (_) {} });
+  window.dispatchEvent(new CustomEvent('wallet-standard:app-ready', { detail: { register: registerStd } }));
+} catch (_) {}
+
+const KNOWN = [
+  { name: 'Phantom', url: 'https://phantom.com/', color: '#AB9FF2', legacy: () => (window.phantom && window.phantom.solana && window.phantom.solana.isPhantom) ? window.phantom.solana : (window.solana && window.solana.isPhantom ? window.solana : null) },
+  { name: 'Solflare', url: 'https://solflare.com/', color: '#FC7227', legacy: () => (window.solflare && window.solflare.isSolflare) ? window.solflare : null },
+  { name: 'Backpack', url: 'https://backpack.app/', color: '#E33E3F', legacy: () => null }
+];
+function walletEntries() {
+  const list = stdWallets.map(w => ({ name: w.name, icon: w.icon, kind: 'std', ref: w }));
+  for (const k of KNOWN) {
+    if (list.some(e => e.name.toLowerCase().includes(k.name.toLowerCase()))) continue;
+    const p = k.legacy();
+    if (p) list.push({ name: k.name, icon: null, color: k.color, kind: 'legacy', ref: p });
+  }
+  const missing = KNOWN.filter(k => !list.some(e => e.name.toLowerCase().includes(k.name.toLowerCase())));
+  return { list, missing };
+}
+
+function renderWalletModal() {
+  const body = $('#wm-body');
+  if (wallet.address) {
+    $('#wm-title').textContent = 'Your wallet';
+    body.innerHTML = `
+      <div class="wallet-line" style="margin-bottom:14px"><div class="av"></div><div><b>${esc(wallet.entry ? wallet.entry.name : 'Wallet')}</b><span>${wallet.balance != null ? esc(wallet.balance) : 'Connected on Solana'}</span></div></div>
+      <div class="addr">${esc(wallet.address)}</div>
+      <div class="row"><button class="btn" type="button" id="wm-copy">Copy address</button><button class="btn solid" type="button" id="wm-disc">Disconnect</button></div>`;
+    $('#wm-copy').onclick = async () => { try { await navigator.clipboard.writeText(wallet.address); toast('Address copied'); } catch (_) { toast('Couldn’t copy. Select the address to copy it.', 'err'); } };
+    $('#wm-disc').onclick = () => { closeModal('wallet-modal'); disconnect(false); };
+    return;
+  }
+  $('#wm-title').textContent = 'Connect a wallet';
+  const { list, missing } = walletEntries();
+  let html = '<p class="sub">Choose a Solana wallet. MasterSet only reads your public address. It never moves funds without your approval.</p><div class="wlist">';
+  list.forEach((e, i) => {
+    const ico = e.icon ? `<img src="${esc(e.icon)}" alt="">` : `<span class="wico" style="background:${esc(e.color || '#444')}">${esc(e.name[0])}</span>`;
+    html += `<button class="witem" type="button" data-w="${i}">${ico}<div><b>${esc(e.name)}</b><span>Detected</span></div><span class="tagr">Connect</span></button>`;
+  });
+  missing.forEach(k => {
+    html += `<a class="witem" href="${esc(k.url)}" target="_blank" rel="noopener"><span class="wico" style="background:${esc(k.color)}">${esc(k.name[0])}</span><div><b>${esc(k.name)}</b><span>Not installed</span></div><span class="tagr inst">Install</span></a>`;
+  });
+  html += '</div>';
+  if (!list.length) html += '<p class="hint">No Solana wallet found in this browser. Install one above, then reload the page.</p>';
+  body.innerHTML = html;
+  $$('[data-w]', body).forEach(btn => btn.addEventListener('click', () => connect(list[+btn.dataset.w])));
+}
+
+async function connect(entry, quiet) {
+  try {
+    let address, account = null;
+    if (entry.kind === 'std') {
+      const res = await entry.ref.features['standard:connect'].connect(quiet ? { silent: true } : undefined);
+      const accts = (res && res.accounts && res.accounts.length) ? res.accounts : (entry.ref.accounts || []);
+      account = accts.find(a => (a.chains || []).some(c => String(c).startsWith('solana:'))) || accts[0];
+      if (!account) throw new Error('no account returned');
+      address = account.address;
+      const ev = entry.ref.features['standard:events'];
+      if (ev && ev.on) {
+        wallet.unsub = ev.on('change', ({ accounts }) => {
+          if (!accounts) return;
+          if (!accounts.length) { disconnect(true); toast('Wallet disconnected'); }
+          else if (accounts[0].address !== wallet.address) { wallet.account = accounts[0]; setAddress(accounts[0].address); toast('Switched to ' + short(wallet.address)); }
+        });
+      }
+    } else {
+      const res = await entry.ref.connect(quiet ? { onlyIfTrusted: true } : undefined);
+      const pk = (res && res.publicKey) || entry.ref.publicKey;
+      if (!pk) throw new Error('no public key returned');
+      address = pk.toString();
+      if (entry.ref.on) {
+        const h = npk => { if (npk) { setAddress(npk.toString()); toast('Switched to ' + short(wallet.address)); } else { disconnect(true); toast('Wallet disconnected'); } };
+        entry.ref.on('accountChanged', h);
+        wallet.unsub = () => { try { if (entry.ref.removeListener) entry.ref.removeListener('accountChanged', h); else if (entry.ref.off) entry.ref.off('accountChanged', h); } catch (_) {} };
+      }
+    }
+    wallet.entry = entry; wallet.account = account;
+    setAddress(address);
+    closeModal('wallet-modal');
+    if (!quiet) toast('Connected ' + entry.name + ' · ' + short(wallet.address));
+  } catch (e) { if (!quiet) toast(errText(e, 'Couldn’t connect ' + entry.name + '.'), 'err'); }
+}
+
+function setAddress(addr) {
+  let a = String(addr);
+  const w = W3();
+  if (w) { try { a = new w.PublicKey(a).toBase58(); } catch (_) {} }
+  wallet.address = a; wallet.balance = null;
+  renderWalletBtn(); renderAll();
+  fetchBalance(a);
+}
+
+// Swap in your own RPC endpoint (Helius, QuickNode, Triton) for reliable balances.
+const RPC_URL = null;
+async function fetchBalance(addr) {
+  const w = W3(); if (!w) return;
+  try {
+    const conn = new w.Connection(RPC_URL || w.clusterApiUrl('mainnet-beta'), 'confirmed');
+    const lamports = await Promise.race([conn.getBalance(new w.PublicKey(addr)), sleep(6000).then(() => { throw new Error('timeout'); })]);
+    if (wallet.address === addr) { wallet.balance = (lamports / w.LAMPORTS_PER_SOL).toFixed(3) + ' SOL'; renderPanel(); }
+  } catch (_) { /* balance stays hidden if the RPC is unreachable */ }
+}
+
+async function disconnect(silent) {
+  const e = wallet.entry;
+  try { if (wallet.unsub) wallet.unsub(); } catch (_) {}
+  wallet.unsub = null;
+  if (e && !silent) {
+    try {
+      if (e.kind === 'std') { const d = e.ref.features['standard:disconnect']; if (d) await d.disconnect(); }
+      else if (e.ref.disconnect) await e.ref.disconnect();
+    } catch (_) {}
+  }
+  wallet.address = null; wallet.entry = null; wallet.account = null; wallet.balance = null;
+  renderWalletBtn(); renderAll();
+  if (!silent) toast('Wallet disconnected');
+}
+
+function renderWalletBtn() {
+  const b = $('#wallet-btn');
+  if (wallet.address) { b.classList.add('solid'); b.innerHTML = '<span class="dot"></span>' + esc(short(wallet.address)); b.setAttribute('aria-label', 'Wallet ' + wallet.address); }
+  else { b.classList.remove('solid'); b.textContent = window.innerWidth < 400 ? 'Connect' : 'Connect wallet'; b.removeAttribute('aria-label'); }
+}
+function openWallet() { renderWalletModal(); openModal('wallet-modal'); }
+$('#wallet-btn').addEventListener('click', openWallet);
+
+/* ---------- Binder rendering ---------- */
+let current = SETS[0].id;
+
+function renderTabs() {
+  $('#set-tabs').innerHTML = SETS.map(s => {
+    const on = s.id === current;
+    return `<button class="set-tab${on ? ' on' : ''}" type="button" role="tab" aria-selected="${on}" tabindex="${on ? 0 : -1}" data-set="${s.id}"><span class="st-fr">${esc(s.franchise)}</span><span class="st-t">${esc(s.short)}</span><span class="st-p">${s.slots.length} cards, ${esc(s.grade)}</span></button>`;
+  }).join('');
+}
+
+function slotHTML(set, slot) {
+  const img = cardImg(set, slot);
+  return `<div class="slab" style="--h:${slot.hue}">
+    <div class="slab-label"><span>${esc(numLabel(set, slot))}</span><span class="g">${esc(set.grade)}</span></div>
+    <div class="slab-art${img ? ' has-img' : ''}">${img ? `<img src="${esc(img)}" alt="${esc(slot.name)}, ${esc(set.title)} ${esc(numLabel(set, slot))}" loading="lazy" decoding="async">` : ''}<span class="num">${esc(slot.num)}</span></div>
+    <div class="slab-foot">${esc(slot.name)}</div>
+  </div>`;
+}
+
+function renderBinder() {
+  const set = setById(current);
+  $('#b-title').textContent = set.title;
+  $('#b-desc').textContent = set.desc;
+  const grid = $('#slot-grid');
+  grid.innerHTML = set.slots.map(s => slotHTML(set, s)).join('');
+  $$('.slab-art img', grid).forEach(img => img.addEventListener('error', () => {
+    const art = img.closest('.slab-art'); if (art) art.classList.remove('has-img'); img.remove();
+  }, { once: true }));
+}
+
+function renderPanel() {
+  const set = setById(current);
+  const total = set.slots.length;
+  let h = `<div class="pcard"><div class="prog-row"><span class="prog-big">${total}<small> cards</small></span></div>
+    <div class="kv" style="margin-top:16px"><span>Grade</span><b>${esc(set.grade)}</b></div>
+    <div class="kv" style="margin-top:8px"><span>Category</span><b>${esc(set.franchise)}</b></div></div>`;
+
+  if (!wallet.address) {
+    h += `<div class="pcard"><h4>Connect your wallet</h4><p class="hint" style="margin:0 0 14px">Connect the Solana wallet that holds your Collector Crypt cards.</p><button class="btn solid" type="button" data-act="connect">Connect wallet</button></div>`;
+  } else {
+    h += `<div class="pcard"><div class="wallet-line"><div class="av"></div><div><b>${esc(short(wallet.address))}</b><span>${esc(wallet.entry ? wallet.entry.name : '')}${wallet.balance ? ' · ' + esc(wallet.balance) : ''}</span></div></div></div>`;
+  }
+
+  h += `<div class="pcard"><h4>Finishing this binder</h4>
+    <ol class="flow">
+      <li>Deposit the cards from this set you already hold.</li>
+      <li>Fill the rest through the Collector Crypt marketplace or gacha and instant buyback.</li>
+      <li>Once all ${total} slots are in, mint the Set NFT.</li>
+    </ol></div>`;
+
+  $('#panel').innerHTML = h;
+}
+
+function renderAll() { renderTabs(); renderBinder(); renderPanel(); }
+
+$('#set-tabs').addEventListener('click', e => {
+  const t = e.target.closest('[data-set]'); if (!t) return;
+  current = t.dataset.set; renderAll();
+});
+$('#set-tabs').addEventListener('keydown', e => {
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+  const i = SETS.findIndex(s => s.id === current);
+  const n = (i + (e.key === 'ArrowRight' ? 1 : -1) + SETS.length) % SETS.length;
+  current = SETS[n].id; renderAll();
+  const btn = $(`[data-set="${current}"]`); if (btn) btn.focus();
+});
+$('#panel').addEventListener('click', e => {
+  const t = e.target.closest('[data-act="connect"]'); if (t) openWallet();
+});
+
+/* ---------- Nav border on scroll ---------- */
+const nav = $('#nav');
+const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
+window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+/* ---------- Hero binder animation ---------- */
+(function hero() {
+  const slots = $$('#hero-binder .hb-slot'), seal = $('#hero-seal'), count = $('#hb-count');
+  $$('#hero-binder .hb-slot img').forEach(img => {
+    const fail = () => { const sl = img.closest('.hb-slot'); if (sl) sl.classList.remove('img'); img.remove(); };
+    if (img.complete && img.naturalWidth === 0) fail(); else img.addEventListener('error', fail, { once: true });
+  });
+  const set = n => { slots.forEach((s, i) => s.classList.toggle('on', i < n)); count.textContent = Math.min(n, slots.length) + ' / ' + slots.length; seal.classList.toggle('on', n >= slots.length); };
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { set(slots.length); return; }
+  let n = 3; set(n);
+  setInterval(() => { n++; if (n > slots.length + 4) n = 0; set(n); }, 700);
+})();
+
+/* ---------- Reconnect quietly if the wallet already trusts this site ---------- */
+setTimeout(() => {
+  if (wallet.address) return;
+  const p = KNOWN[0].legacy();
+  if (p && p.isConnected === false && p.connect) connect({ name: 'Phantom', kind: 'legacy', ref: p }, true);
+}, 400);
+
+renderAll();
+})();
+</script>
+</body>
+</html>
